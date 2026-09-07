@@ -1,0 +1,23 @@
+<div class="app-container">
+  <h1>Movie Ticket Counter</h1>
+
+  <div class="ticket-row">
+    <span class="ticket-label">Adult Tickets</span>
+    <div class="ticket-controls">
+      <button (click)="decrementAdultTickets()">-</button>
+      <span class="ticket-value">{{adultTickets()}}</span>
+      <button (click)="incrementAdultTickets()">+</button>
+    </div>
+  </div>
+
+  <div class="ticket-row">
+    <span class="ticket-label">Child Tickets</span>    
+    <div class="ticket-controls">
+      <button (click)="decrementChildTickets()">-</button>
+      <span class="ticket-value">{{childTickets()}}</span>
+      <button (click)="incrementChildTickets()">+</button>
+    </div>
+  </div>
+
+  <button class="reset-button" (click)="reset()">Reset</button>
+</div>
