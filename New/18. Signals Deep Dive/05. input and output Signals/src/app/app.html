@@ -1,0 +1,124 @@
+<div class="app-container">
+  <h1>Movie Ticket Counter</h1>
+
+  <app-ticket-row label="Adult Tickets" [count]="adultTickets()" [unitPrice]="adultTicketPrice" (increment)="incrementAdultTickets()" (decrement)="decrementAdultTickets()">
+  </app-ticket-row>
+
+  <app-ticket-row label="Child Tickets" [count]="childTickets()" [unitPrice]="childTicketPrice" (increment)="incrementChildTickets()" (decrement)="decrementChildTickets()">
+  </app-ticket-row>
+
+  <button class="reset-button" (click)="reset()">Reset</button>
+
+  <div class="show-time-picker">
+    <h2>Pick a Show Time</h2>
+    <div class="show-time-buttons">
+      @for (time of showTimes; track time)
+      {
+        <button [class.selected]="selectedShowTime() === time" (click)="selectShowTime(time)">
+          {{time}}
+        </button>
+      }
+    </div>
+  </div>
+
+
+  <div class="availability-box">
+    @if (seatAvailability.isLoading())
+    {
+      <p>Checking availability...</p>
+    }
+    @else if (seatAvailability.error())
+    {
+      <p class="error-text">Could not load availability. Please try again.</p>
+    }
+    @else if (seatAvailability.hasValue())
+    {
+      <p><strong>{{seatAvailability.value()}}</strong> seats available.</p>
+    }
+    @else
+    {
+      <p class="hint-text">Pick a show time to check availability.</p>
+    }
+  </div>
+
+
+  <div class="now-showing">
+    <h2>Now Showing</h2>
+
+    @if (moviesResource.isLoading())
+    {
+      <p>Loading movies...</p>
+    }
+    @else if (moviesResource.error())
+    {
+      <p class="error-text">Could not load the movie list.</p>
+    }
+    @else if (moviesResource.hasValue())
+    {
+      <div class="movie-list">
+        @for (movie of moviesResource.value(); track movie.id)
+        {
+          <button (click)="selectMovie(movie.id)">{{movie.title}}</button>
+        }
+      </div>
+
+      @if (movieDetailsResource.isLoading())
+      {
+        <p>Loading details...</p>
+      }
+      @else if (movieDetailsResource.error())
+      {
+        <p class="error-text">Could not load the movie details.</p>
+      }
+      @else if (movieDetailsResource.hasValue())
+      {
+        <div class="movie-details">
+          <h3>{{movieDetailsResource.value().title}}</h3>
+          <p>{{movieDetailsResource.value().body}}</p>
+        </div>
+      }
+    }
+  </div>
+
+
+  <div class="summary-section">
+
+    <div class="ticker-row">
+      <span class="ticker-label">Seconds on page: </span>
+      <span class="ticker-value">{{ticker()}}</span>
+    </div>
+
+    <input class="search-box" type="text" placeholder="Search movies..." [(ngModel)]="searchQuery" />
+
+    @if (searchResults().length > 0)
+    {
+      <div class="search-results">
+        @for (result of searchResults(); track result.id)
+        {
+          <div class="search-result-item">{{ result.title }}</div>
+        }
+      </div>
+    }
+
+    <button (click)="refreshUser()">Refresh User</button>
+
+    <div class="ticket-row">
+      <span class="ticket-label">Recommended Package</span>
+      <span class="ticket-value">{{recommendedPackage()}}</span>
+    </div>
+
+    <button class="reset-button" (click)="upgradeToPremium()">Upgrade to Premium</button>
+
+    <div class="ticket-row">
+      <span class="ticket-label">Total Tickets</span>
+      <span class="ticket-value">{{totalTickets()}}</span>
+    </div>
+
+    <div class="ticket-row">
+      <span class="ticket-label">Total Cost</span>
+      <span class="ticket-value">${{totalCost()}}</span>
+    </div>
+
+    <p class="summary-text">{{summaryText()}}</p>
+  </div>
+</div>

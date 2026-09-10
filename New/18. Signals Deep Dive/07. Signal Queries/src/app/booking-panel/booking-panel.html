@@ -1,0 +1,9 @@
+<section class="booking-panel">
+ <h2>Booking Summary</h2>
+ <ng-content></ng-content>
+
+ @if (!hasArrivalGuidance())
+ {
+  <p class="panel-hit">Choose a show time to see arrival guidance.</p>
+ }
+</section>
